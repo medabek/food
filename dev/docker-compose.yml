@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  zenfood_postgres:
+    image: postgres:9.6-alpine
+    volumes:
+      - zenfood_postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5456:5432
+    environment:
+      POSTGRES_DB: zenfood
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    container_name: zenfood_postgres
+
+volumes:
+  zenfood_postgres_data:
+    driver: local
