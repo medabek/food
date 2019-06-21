@@ -1,27 +1,27 @@
 package io.zensoft.food.service;
 
+import io.zensoft.food.exception.AppException;
 import io.zensoft.food.model.Role;
+import io.zensoft.food.model.RoleName;
 import io.zensoft.food.model.User;
+import io.zensoft.food.payload.LoginRequest;
+import io.zensoft.food.payload.SignUpRequest;
 import io.zensoft.food.repository.RoleRepository;
 import io.zensoft.food.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collections;
 
 
 @Service("userService")
+@Transactional
 public class UserService{
 
     @Qualifier("userRepository")
@@ -33,52 +33,40 @@ public class UserService{
     private RoleRepository roleRepository;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    AuthenticationManager authenticationManager;
 
-    public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User saveUser(SignUpRequest signUpRequest){
+    // Creating user's account
+    User user = new User(signUpRequest.getUsername(),
+            signUpRequest.getEmail(), signUpRequest.getPassword());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+    Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+            .orElseThrow(() -> new AppException("User Role not set."));
+
+        user.setRoles(Collections.singleton(userRole));
+
+    User result = userRepository.save(user);
+    return result;
+
     }
 
 
-    public User findUserById(int id) {
-        return userRepository.findById(id);
+    public Authentication getAuthentication(LoginRequest loginRequest){
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsernameOrEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+        return authentication;
     }
 
-    public User saveUser(User user,String role) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setActive(1);
-        Role userRole = roleRepository.findByRole(role);
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-        return userRepository.save(user);
+    public void deleteUserById(long id){
+        userRepository.deleteById(id);
     }
-
-
-    public ArrayList<User> getAllByStatus(String status){
-        ArrayList<User> list=(ArrayList<User>)userRepository.getAllByStatus(status);
-        ArrayList<User> finalist=new ArrayList<User>();
-        if(!list.isEmpty() && list.size()>2){
-        finalist.add(list.get(0));
-        finalist.add(list.get(1));
-        finalist.add(list.get(2));
-        finalist.add(list.get(3));
-        finalist.add(list.get(4));
-        finalist.add(list.get(5));
-
-        return finalist;
-        }
-
-        return list;
-    }
-
-    public ArrayList<User> getAll()
-    {
-        return (ArrayList) userRepository.findAll();
-    }
-
-    public User save(User user){
-        return userRepository.save(user);
-    }
-
-
 }

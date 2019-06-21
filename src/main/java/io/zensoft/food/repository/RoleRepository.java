@@ -1,11 +1,14 @@
 package io.zensoft.food.repository;
 
+
 import io.zensoft.food.model.Role;
+import io.zensoft.food.model.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 
-@Repository("roleRepository")
-public interface RoleRepository extends JpaRepository<Role, Integer> {
-    Role findByRole(String role);
+@Repository
+public interface RoleRepository extends JpaRepository<Role, Long> {
+    Optional<Role> findByName(RoleName roleName);
 }
