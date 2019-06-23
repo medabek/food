@@ -18,24 +18,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    @Autowired
-    JwtTokenProvider tokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+    private final JwtTokenProvider tokenProvider;
+
     private UserService userService;
+
+    @Autowired
+    public AuthController(UserRepository userRepository, UserService userService, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder){
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.tokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

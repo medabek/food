@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,18 +25,22 @@ import java.util.Collections;
 public class UserService{
 
     @Qualifier("userRepository")
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Qualifier("roleRepository")
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
+
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    public PasswordEncoder passwordEncoder;
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager){
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
+    }
 
     public User saveUser(SignUpRequest signUpRequest){
     // Creating user's account
@@ -55,7 +59,6 @@ public class UserService{
 
     }
 
-
     public Authentication getAuthentication(LoginRequest loginRequest){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -66,7 +69,4 @@ public class UserService{
         return authentication;
     }
 
-    public void deleteUserById(long id){
-        userRepository.deleteById(id);
-    }
 }

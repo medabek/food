@@ -8,7 +8,6 @@ import io.zensoft.food.payload.UserSummary;
 import io.zensoft.food.repository.UserRepository;
 import io.zensoft.food.security.CurrentUser;
 import io.zensoft.food.security.UserPrincipal;
-import io.zensoft.food.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class MainController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    public MainController(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
@@ -50,9 +50,7 @@ public class MainController {
     public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-
         UserProfile userProfile = new UserProfile(user.getId(), user.getUsername(), user.getEmail());
-
         return userProfile;
     }
 
@@ -60,18 +58,8 @@ public class MainController {
     public UserProfile getUserProfileById(@PathVariable(value = "id") long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-
         UserProfile userProfile = new UserProfile(user.getId(), user.getUsername(), user.getEmail());
-
         return userProfile;
     }
 
-//    @DeleteMapping("/users/{id}")
-//    public ResponseEntity deleteUserById(@PathVariable(value = "id") long id) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-//
-//        userService.deleteUserById(id);
-//        return ResponseEntity.ok().build();
-//    }
 }
