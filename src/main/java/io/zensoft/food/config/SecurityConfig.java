@@ -18,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         prePostEnabled = true
 )
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -79,16 +81,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js")
+                        "/**/*.js","/swagger-resources/**",
+                            "/swagger-ui.html",
+                            "/v2/api-docs",
+                            "/webjars/**")
                         .permitAll()
                     .antMatchers("/api/auth/**")
                         .permitAll()
-                    .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
+                    .antMatchers("/api/user/checkEmailAvailability")
                         .permitAll()
                     .antMatchers(HttpMethod.GET, "/api/user/**", "/api/users/**")
                         .permitAll()
                     .anyRequest()
-                        .authenticated();
+                        .authenticated()
+                .and().logout().logoutUrl("/logout").disable();
+
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

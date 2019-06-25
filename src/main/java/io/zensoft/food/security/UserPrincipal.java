@@ -2,6 +2,8 @@ package io.zensoft.food.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.zensoft.food.model.User;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class UserPrincipal implements UserDetails {
 
     private Long id;
@@ -22,6 +26,8 @@ public class UserPrincipal implements UserDetails {
 
     @JsonIgnore
     private String password;
+
+    private int balance;
 
     private Collection<? extends GrantedAuthority> authorities;
 

@@ -80,6 +80,8 @@ public class UserServiceImpl implements UserService {
 
     public UserProfile findById( long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-        return new UserProfile(user.getId(), user.getUsername(), user.getEmail());
+        return new UserProfile(user.getId(), user.getUsername(), user.getEmail(), user.getBalance());
     }
+
+    public void logout(User user){};
 }
