@@ -1,7 +1,28 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/zenfood
-    username: postgres
-    password: 123
-    platform: postgres
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5456/zenfood
+    username: postgres
+    password: 123456
+    platform: postgres
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+app:
+  jwtSecret: JWTSuperSecretKey
+  jwtExpirationInMs: 604800000
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+
+server:
+  port: 8090
+
