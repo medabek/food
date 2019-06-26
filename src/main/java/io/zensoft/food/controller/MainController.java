@@ -46,7 +46,7 @@ public class MainController {
     }
 
     @GetMapping("/user/me")
-    @PreAuthorize("ROLE_USER")
+    @PreAuthorize("isAuthenticated()")
     @ApiOperation(value = "Current user body to see")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
         return new UserSummary(currentUser.getId(), currentUser.getFirstname(), currentUser.getLastname());
