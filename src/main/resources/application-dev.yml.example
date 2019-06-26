@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/zenfood
+    url: jdbc:postgresql://localhost:5456/zenfood
     username: postgres
-    password: 123
+    password: 123456
     platform: postgres
     driver-class-name: org.postgresql.Driver
