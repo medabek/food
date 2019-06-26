@@ -9,6 +9,7 @@ import io.zensoft.food.model.Dish;
 import io.zensoft.food.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,27 +29,32 @@ public class DishController {
         this.dishEndpoint = dishEndpoint;
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<DishDto>> getAllByCafeId(@RequestParam("cafeId") @NotNull Long cafeId){
         return ResponseEntity.ok(dishEndpoint.getAllDishesByCafeId(cafeId));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<DishDto> add(@Valid @RequestBody DishCreateRequestDto request) {
         return ResponseEntity.ok(dishEndpoint.add(request));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DishDto> update(@PathVariable Long id, @RequestBody DishUpdateRequestDto request) {
         return ResponseEntity.ok(dishEndpoint.update(id, request));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         dishEndpoint.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity<DishDto> getById(@PathVariable Long id){
         return ResponseEntity.ok(dishEndpoint.getById(id));
