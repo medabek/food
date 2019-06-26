@@ -41,9 +41,8 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/logout")
-    public boolean logout(@AuthenticationPrincipal final User user) {
+    @GetMapping("/signout")
+    public void logout(@AuthenticationPrincipal final User user) {
         userService.logout(user);
-        return true;
     }
 }

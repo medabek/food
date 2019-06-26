@@ -15,9 +15,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
-            "username"
-        }),
-        @UniqueConstraint(columnNames = {
             "email"
         })
 })
@@ -32,8 +29,12 @@ public class User{
     private Long id;
 
     @NotBlank
-    @Size(max = 15)
-    private String username;
+    @Size(max = 25)
+    private String firstname;
+
+    @NotBlank
+    @Size(max = 25)
+    private String lastname;
 
     @NaturalId
     @NotBlank
@@ -45,25 +46,24 @@ public class User{
     @Size(max = 100)
     private String password;
 
-    private Integer balance=0;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public User(@NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password) {
-        this.username = username;
+    public User(@NotBlank @Size(max = 25) String firstname,String lastname, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password) {
+        this.firstname = firstname;
         this.email = email;
         this.password = password;
+        this.lastname = lastname;
     }
 
-    public User(@NotBlank @Size(max = 15) String username, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, @NotBlank int balance, Set<Role> roles) {
-        this.username = username;
+    public User(@NotBlank @Size(max = 25) String firstname, @NotBlank @Size(max = 25) String lastname, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password, Set<Role> roles) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.balance = balance;
         this.roles = roles;
     }
 }

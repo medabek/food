@@ -1,17 +1,14 @@
 package io.zensoft.food.payload;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class UserSummary {
     private Long id;
-    private String username;
-
-    public UserSummary(Long id, String username) {
-        this.id = id;
-        this.username = username;
-    }
-
+    private String firstname;
+    private String lastname;
 }

@@ -1,20 +1,15 @@
 package io.zensoft.food.payload;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class UserProfile {
     private Long id;
-    private String username;
+    private String firstname;
+    private String lastname;
     private String email;
-    private Integer balance;
-
-    public UserProfile(Long id, String username, String email, Integer balance) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.balance = balance;
-    }
 }

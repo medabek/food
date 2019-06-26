@@ -48,7 +48,8 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = new User(
-                signUpRequest.getUsername(),
+                signUpRequest.getFirstname(),
+                signUpRequest.getLastname(),
                 signUpRequest.getEmail(),
                 signUpRequest.getPassword()
         );
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     public UserProfile findById( long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-        return new UserProfile(user.getId(), user.getUsername(), user.getEmail(), user.getBalance());
+        return new UserProfile(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail());
     }
 
     public void logout(User user){};
