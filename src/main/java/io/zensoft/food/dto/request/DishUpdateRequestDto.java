@@ -16,7 +16,9 @@ public class DishUpdateRequestDto {
 
     @NotNull
     private BigDecimal price;
-
+    
     @NotNull
     private Long cafeId;
+    
+   
 }

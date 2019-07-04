@@ -1,16 +1,14 @@
 package io.zensoft.food.controller;
 
-import io.zensoft.food.domain.DishUpdateRequest;
 import io.zensoft.food.dto.DishDto;
 import io.zensoft.food.dto.request.DishCreateRequestDto;
 import io.zensoft.food.dto.request.DishUpdateRequestDto;
 import io.zensoft.food.endpoint.DishEndpoint;
-import io.zensoft.food.model.Dish;
-import io.zensoft.food.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,12 +18,10 @@ import java.util.List;
 @RequestMapping("/api/v1/dishes")
 public class DishController {
 
-    private DishService dishService;
     private final DishEndpoint dishEndpoint;
 
     @Autowired
-    public DishController(DishService dishService, DishEndpoint dishEndpoint) {
-        this.dishService = dishService;
+    public DishController(DishEndpoint dishEndpoint) {
         this.dishEndpoint = dishEndpoint;
     }
 
@@ -37,14 +33,16 @@ public class DishController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<DishDto> add(@Valid @RequestBody DishCreateRequestDto request) {
-        return ResponseEntity.ok(dishEndpoint.add(request));
+    public ResponseEntity<DishDto> add(@Valid @RequestPart(value = "dish") DishCreateRequestDto request,
+                                       @RequestPart(value = "file") MultipartFile file) {
+        return ResponseEntity.ok(dishEndpoint.add(request, file));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<DishDto> update(@PathVariable Long id, @RequestBody DishUpdateRequestDto request) {
-        return ResponseEntity.ok(dishEndpoint.update(id, request));
+    public ResponseEntity<DishDto> update(@PathVariable Long id, @RequestBody DishUpdateRequestDto request,
+                                          @RequestPart(value = "file") MultipartFile file) {
+        return ResponseEntity.ok(dishEndpoint.update(id, request, file));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

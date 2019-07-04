@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -67,11 +69,15 @@ public class UserServiceImpl implements UserService {
     public JwtAuthenticationResponse signin(@NonNull LoginRequest loginRequest) {
         Authentication authentication = authService.getAuthentication(loginRequest);
 
+        User user = userRepository.findUserByEmail(loginRequest.getEmail());
+
+        Set role = user.getRoles();
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtTokenProvider.generateToken(authentication);
 
-        return new JwtAuthenticationResponse(jwt);
+        return new JwtAuthenticationResponse(jwt, role);
     }
 
     public UserIdentityAvailability existsByEmail(String email) {

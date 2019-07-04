@@ -8,6 +8,7 @@ spring:
 
   jpa:
     show-sql: true
+    generate-ddl: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -22,6 +23,8 @@ logging:
       hibernate:
         SQL: DEBUG
 
-server:
-  port: 8090
-
+amazonProperties:
+  endpointUrl: https://s3.console.aws.amazon.com/s3/buckets
+  accessKey: AKIAUNGXOCQBVNBOPI7R
+  secretKey: 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
+  bucketName: zenfood.dish

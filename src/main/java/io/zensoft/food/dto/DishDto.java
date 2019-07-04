@@ -15,4 +15,6 @@ public class DishDto {
     private double portion;
 
     private BigDecimal price;
+
+    private String imageUrl;
 }
