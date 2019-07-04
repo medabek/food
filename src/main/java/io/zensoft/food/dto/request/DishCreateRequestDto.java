@@ -23,4 +23,5 @@ public class DishCreateRequestDto {
 
     @NotNull
     private Long cafeId;
+
 }

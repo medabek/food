@@ -13,6 +13,7 @@ public class DishMapper {
                 .name(dish.getName())
                 .portion(dish.getPortion())
                 .price(dish.getPrice())
+                .imageUrl(dish.getImageUrl())
                 .build();
     }
 }

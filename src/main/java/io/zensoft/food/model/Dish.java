@@ -1,7 +1,6 @@
 package io.zensoft.food.model;
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -25,4 +24,6 @@ public class Dish {
     @ManyToOne
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
+
+    private String imageUrl;
 }

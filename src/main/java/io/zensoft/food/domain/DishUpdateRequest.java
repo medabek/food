@@ -16,6 +16,7 @@ public class DishUpdateRequest {
     private double portion;
 
     private BigDecimal price;
-
+    
     private Cafe cafe;
+    
 }
