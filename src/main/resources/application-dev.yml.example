@@ -14,8 +14,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 app:
-  jwtSecret: JWTSuperSecretKey
-  jwtExpirationInMs: 604800000
+  jwt-secret: JWTSuperSecretKey
+  jwt-expiration-in-ms: 604800000
 
 logging:
   level:
@@ -23,8 +23,8 @@ logging:
       hibernate:
         SQL: DEBUG
 
-amazonproperties:
-  endpointUrl: https://s3-eu-west-1.amazonaws.com
-  accessKey: AKIAUNGXOCQBVNBOPI7R
-  secretKey: 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
-  bucketName: zenfood.dish
+aws:
+  endpoint-url: https://s3-eu-west-1.amazonaws.com
+  access-key: AKIAUNGXOCQBVNBOPI7R
+  secret-key: 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
+  bucket-name: zenfood.dish
