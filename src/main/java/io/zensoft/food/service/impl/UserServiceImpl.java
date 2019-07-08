@@ -9,6 +9,7 @@ import io.zensoft.food.payload.*;
 import io.zensoft.food.repository.RoleRepository;
 import io.zensoft.food.repository.UserRepository;
 import io.zensoft.food.security.JwtTokenProvider;
+import io.zensoft.food.security.UserPrincipal;
 import io.zensoft.food.service.AuthService;
 import io.zensoft.food.service.UserService;
 import lombok.NonNull;
@@ -90,5 +91,13 @@ public class UserServiceImpl implements UserService {
         return new UserProfile(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail());
     }
 
-    public void logout(User user){};
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+
+    @Override
+    public User currentUser(UserPrincipal currentUser) {
+        return userRepository.findUserByEmail(currentUser.getEmail());
+    }
 }
