@@ -11,7 +11,6 @@ import io.zensoft.food.model.Cafe;
 import io.zensoft.food.model.Dish;
 import io.zensoft.food.service.CafeService;
 import io.zensoft.food.service.DishService;
-import io.zensoft.food.service.impl.AmazonClientServiceImpl;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,16 +26,13 @@ public class DishEndpointImpl implements DishEndpoint {
     private final CafeService cafeService;
     private final DishService dishService;
     private final DishMapper dishMapper;
-    private final AmazonClientServiceImpl amazonClientService;
 
     @Autowired
     public DishEndpointImpl(CafeService cafeService,
-                            AmazonClientServiceImpl amazonClientService,
                             DishService dishService, DishMapper dishMapper) {
         this.cafeService = cafeService;
         this.dishService = dishService;
         this.dishMapper = dishMapper;
-        this.amazonClientService = amazonClientService;
     }
 
     @Transactional

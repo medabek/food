@@ -1,6 +1,6 @@
 package io.zensoft.food.payload;
 
-import io.zensoft.food.model.RoleName;
+import io.zensoft.food.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,9 +11,9 @@ import java.util.Set;
 public class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
-    private Set<RoleName> userRole;
+    private Set<Role> userRole;
 
-    public JwtAuthenticationResponse(String accessToken, Set<RoleName> userRole) {
+    public JwtAuthenticationResponse(String accessToken, Set<Role> userRole) {
         this.userRole = userRole;
         this.accessToken = accessToken;
     }

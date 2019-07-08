@@ -2,7 +2,6 @@ package io.zensoft.food.service;
 
 import io.zensoft.food.model.User;
 import io.zensoft.food.payload.*;
-import io.zensoft.food.security.CurrentUser;
 import io.zensoft.food.security.UserPrincipal;
 
 
@@ -17,5 +16,5 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    User currentUser(@CurrentUser UserPrincipal currentUser);
+    User currentUser(UserPrincipal currentUser);
 }

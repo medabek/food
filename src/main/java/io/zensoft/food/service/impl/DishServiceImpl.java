@@ -6,7 +6,6 @@ import io.zensoft.food.model.Cafe;
 import io.zensoft.food.model.Dish;
 import io.zensoft.food.repository.CafeRepository;
 import io.zensoft.food.repository.DishRepository;
-import io.zensoft.food.service.AmazonClient;
 import io.zensoft.food.service.DishService;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,20 +49,21 @@ public class DishServiceImpl implements DishService {
 
     @Transactional
     @Override
-    public Dish update(@NonNull DishUpdateRequest request, MultipartFile multipartFile) {
+    public Dish update(@NonNull DishUpdateRequest request,
+                       MultipartFile multipartFile) {
 
         if (!dishRepository.existsById(request.getId())) {
             throw new EntityNotFoundException("Dish with id = " + request.getId() + " not found.");
         }
 
         Dish dish = new Dish();
-        String fileUrl = amazonClient.generateFileName(multipartFile);
+        String fileName = amazonClient.uploadFile(multipartFile);
         dish.setId(request.getId());
         dish.setName(request.getName());
         dish.setPortion(request.getPortion());
         dish.setPrice(request.getPrice());
         dish.setCafe(request.getCafe());
-        dish.setImageUrl(fileUrl);
+        dish.setImageName(fileName);
         return dishRepository.save(dish);
     }
 
@@ -71,8 +71,8 @@ public class DishServiceImpl implements DishService {
     public void delete(@NonNull Long id) {
         Dish dish = dishRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Dish with id = " + id + " not found."));
-        String url = dish.getImageUrl();
-        amazonClient.deleteFileFromS3Bucket(url);
+        String imageName = dish.getImageName();
+        amazonClient.deleteFileFromS3Bucket(imageName);
         dishRepository.deleteById(id);
     }
 
@@ -80,16 +80,13 @@ public class DishServiceImpl implements DishService {
     @Override
     public Dish add(@NonNull DishCreateRequest request,
                     MultipartFile multipartFile) {
-        amazonClient.uploadFile(multipartFile);
-        String fileUrl = amazonClient.getEndpointUrl() + "/"
-                + amazonClient.getBucketName() + "/"
-                + amazonClient.generateFileName(multipartFile);
+        String fileName = amazonClient.uploadFile(multipartFile);
         Dish dish = new Dish();
         dish.setName(request.getName());
         dish.setPrice(request.getPrice());
         dish.setPortion(request.getPortion());
         dish.setCafe(request.getCafe());
-        dish.setImageUrl(fileUrl);
+        dish.setImageName(fileName);
         return dishRepository.save(dish);
     }
 }

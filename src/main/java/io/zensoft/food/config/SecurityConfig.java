@@ -18,7 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableWebSecurity
@@ -63,17 +62,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors()
-                    .and()
+                .and()
                 .csrf()
-                    .disable()
+                .disable()
                 .exceptionHandling()
-                    .authenticationEntryPoint(unauthorizedHandler)
-                    .and()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .and()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                    .antMatchers("/",
+                .antMatchers("/",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -81,19 +80,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js","/swagger-resources/**",
-                            "/swagger-ui.html",
-                            "/v2/api-docs",
-                            "/webjars/**")
-                        .permitAll()
-                    .antMatchers("/api/auth/**")
-                        .permitAll()
-                    .antMatchers("/api/user/checkEmailAvailability")
-                        .permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/user/**", "/api/users/**")
-                        .permitAll()
-                    .anyRequest()
-                        .authenticated()
+                        "/**/*.js", "/swagger-resources/**",
+                        "/swagger-ui.html",
+                        "/v2/api-docs",
+                        "/webjars/**")
+                .permitAll()
+                .antMatchers("/api/auth/**")
+                .permitAll()
+                .antMatchers("/api/user/checkEmailAvailability")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/api/user/**", "/api/users/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and().logout().logoutUrl("/logout").disable();
 
 

@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -33,10 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       PasswordEncoder passwordEncoder,
-                       JwtTokenProvider jwtTokenProvider,
-                       AuthService authService) {
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder,
+                           JwtTokenProvider jwtTokenProvider,
+                           AuthService authService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -72,11 +71,11 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findUserByEmail(loginRequest.getEmail());
 
-        Set role = user.getRoles();
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtTokenProvider.generateToken(authentication);
+
+        Set<Role> role = user.getRoles();
 
         return new JwtAuthenticationResponse(jwt, role);
     }
@@ -86,7 +85,7 @@ public class UserServiceImpl implements UserService {
         return new UserIdentityAvailability(isAvailable);
     }
 
-    public UserProfile findById( long id) {
+    public UserProfile findById(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
         return new UserProfile(user.getId(), user.getFirstname(), user.getLastname(), user.getEmail());
     }
