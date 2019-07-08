@@ -25,5 +25,5 @@ public class Dish {
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
-    private String imageUrl;
+    private String imageName;
 }

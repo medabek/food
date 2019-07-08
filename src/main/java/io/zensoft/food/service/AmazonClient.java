@@ -14,5 +14,5 @@ public interface AmazonClient {
 
     String uploadFile(MultipartFile multipartFile);
 
-    String deleteFileFromS3Bucket(String fileUrl);
+    void deleteFileFromS3Bucket(String fileUrl);
 }

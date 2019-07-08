@@ -54,6 +54,7 @@ public class Swagger2Config {
                 .forPaths(PathSelectors.regex(DEFAULT_INCLUDE_PATTERN))
                 .build();
     }
+
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope
                 = new AuthorizationScope("global", "accessEverything");

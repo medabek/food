@@ -27,7 +27,7 @@ public class DishController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping
-    public ResponseEntity<List<DishDto>> getAllByCafeId(@RequestParam("cafeId") @NotNull Long cafeId){
+    public ResponseEntity<List<DishDto>> getAllByCafeId(@RequestParam("cafeId") @NotNull Long cafeId) {
         return ResponseEntity.ok(dishEndpoint.getAllDishesByCafeId(cafeId));
     }
 
@@ -40,7 +40,7 @@ public class DishController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<DishDto> update(@PathVariable Long id, @RequestBody DishUpdateRequestDto request,
+    public ResponseEntity<DishDto> update(@PathVariable Long id, @RequestPart(value = "dish") DishUpdateRequestDto request,
                                           @RequestPart(value = "file") MultipartFile file) {
         return ResponseEntity.ok(dishEndpoint.update(id, request, file));
     }
@@ -54,7 +54,7 @@ public class DishController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/{id}")
-    public ResponseEntity<DishDto> getById(@PathVariable Long id){
+    public ResponseEntity<DishDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(dishEndpoint.getById(id));
     }
 }

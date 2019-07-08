@@ -23,8 +23,8 @@ logging:
       hibernate:
         SQL: DEBUG
 
-amazonProperties:
-  endpointUrl: https://s3.console.aws.amazon.com/s3/buckets
+amazonproperties:
+  endpointUrl: https://s3-eu-west-1.amazonaws.com
   accessKey: AKIAUNGXOCQBVNBOPI7R
   secretKey: 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
   bucketName: zenfood.dish

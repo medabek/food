@@ -6,17 +6,14 @@ import io.zensoft.food.model.User;
 import io.zensoft.food.payload.JwtAuthenticationResponse;
 import io.zensoft.food.payload.LoginRequest;
 import io.zensoft.food.payload.SignUpRequest;
-import io.zensoft.food.security.JwtTokenProvider;
-import io.zensoft.food.service.impl.AuthServiceImpl;
 import io.zensoft.food.service.impl.UserServiceImpl;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
