@@ -1,5 +1,6 @@
 package io.zensoft.food.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -51,6 +53,10 @@ public class User{
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "manager", orphanRemoval = true)
+    @JsonIgnore
+    private List<CompanyOrder> companyOrder;
 
     public User(@NotBlank @Size(max = 25) String firstname,String lastname, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password) {
         this.firstname = firstname;
