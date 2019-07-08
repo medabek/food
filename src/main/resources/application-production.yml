@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${RDS_DB_HOST}:${RDS_DB_POST}/${RDS_DB_NAME}
+    username: ${RDS_DB_USERNAME}
+    password: ${RDS_DB_PASSWORD}
+    platform: postgres
+
+app:
+  jwt-secret: ${APP_JWT_SECRET}
+  jwt-expiration-in-ms: ${APP_JWT_EXPIRATION}
+
+aws:
+  endpoint-url: ${AWS_ENDPOINT_URL}
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  bucket-name: ${AWS_BUCKET_NAME}
