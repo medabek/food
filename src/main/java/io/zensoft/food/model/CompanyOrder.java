@@ -2,14 +2,19 @@ package io.zensoft.food.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.zensoft.food.enums.CompanyOrderStatus;
+import io.zensoft.food.service.CafeService;
+import io.zensoft.food.service.DishService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 @Entity
@@ -40,14 +45,4 @@ public class CompanyOrder {
 
     private BigDecimal total;
 
-    public BigDecimal getTotal() {
-
-        BigDecimal totalSum = new BigDecimal(0);
-
-        for (Order order : orders){
-            totalSum = totalSum.add(order.getTotal());
-        }
-
-        return totalSum;
-    }
 }

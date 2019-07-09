@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
         OrderItem orderItem = orderItemOptional.orElseGet(() -> {
             OrderItem item = new OrderItem();
 
-            item.setDishId(dish.getId());
+            item.setDish(dish);
             item.setDishName(dish.getName());
             item.setPrice(dish.getPrice());
             item.setQuantity(request.getQuantity());

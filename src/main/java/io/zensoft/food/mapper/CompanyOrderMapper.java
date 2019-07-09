@@ -3,6 +3,7 @@ package io.zensoft.food.mapper;
 import io.zensoft.food.dto.SimpleCompanyOrderDto;
 import io.zensoft.food.dto.CompanyOrderWithUserOrdersDto;
 import io.zensoft.food.model.CompanyOrder;
+import io.zensoft.food.service.impl.CompanyOrderServiceImpl;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,13 @@ import java.util.stream.Collectors;
 public class CompanyOrderMapper {
 
     private OrderMapper orderMapper;
+    private CompanyOrderServiceImpl companyOrderService;
 
     @Autowired
-    public CompanyOrderMapper(OrderMapper orderMapper) {
+    public CompanyOrderMapper(OrderMapper orderMapper,
+                              CompanyOrderServiceImpl companyOrderService) {
         this.orderMapper = orderMapper;
+        this.companyOrderService = companyOrderService;
     }
 
     public SimpleCompanyOrderDto toCompanyOrderOpenDto(@NonNull CompanyOrder companyOrder){
@@ -37,7 +41,7 @@ public class CompanyOrderMapper {
                 .openingTime(companyOrder.getOpeningTime())
                 .closingTime(companyOrder.getClosingTime())
                 .managerId(companyOrder.getManager().getId())
-                .total(companyOrder.getTotal())
+                .cafesTotal(companyOrderService.getCafesTotal(companyOrder))
                 .build();
     }
 
@@ -50,7 +54,7 @@ public class CompanyOrderMapper {
                         .stream()
                         .map(orderMapper::toOrderDto)
                         .collect(Collectors.toList()))
-                .total(companyOrder.getTotal())
+                .cafesTotal(companyOrderService.getCafesTotal(companyOrder))
                 .build();
     }
 }

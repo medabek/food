@@ -3,30 +3,44 @@ package io.zensoft.food.service.impl;
 import io.zensoft.food.enums.CompanyOrderStatus;
 import io.zensoft.food.exception.LogicException;
 import io.zensoft.food.model.CompanyOrder;
+import io.zensoft.food.model.Order;
+import io.zensoft.food.model.OrderItem;
 import io.zensoft.food.repository.CompanyOrderRepository;
 import io.zensoft.food.security.UserPrincipal;
 import io.zensoft.food.service.CompanyOrderService;
 import io.zensoft.food.service.UserService;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingDouble;
 
 @Service
 public class CompanyOrderServiceImpl implements CompanyOrderService {
 
     private CompanyOrderRepository companyOrderRepository;
     private UserService userService;
+    private DishServiceImpl dishService;
 
     @Autowired
     public CompanyOrderServiceImpl(CompanyOrderRepository companyOrderRepository,
-                                   UserService userService) {
+                                   UserService userService,
+                                   DishServiceImpl dishService) {
         this.companyOrderRepository = companyOrderRepository;
         this.userService = userService;
+        this.dishService = dishService;
     }
 
 
@@ -56,7 +70,6 @@ public class CompanyOrderServiceImpl implements CompanyOrderService {
     public CompanyOrder closeOrder(UserPrincipal currentUser) {
 
         CompanyOrder companyOrder = currentCompanyOrder();
-
         companyOrder.setOrderStatus(CompanyOrderStatus.CLOSE);
         companyOrder.setClosingTime((LocalDateTime.now()));
 
@@ -74,5 +87,24 @@ public class CompanyOrderServiceImpl implements CompanyOrderService {
     public CompanyOrder currentCompanyOrder() {
         return companyOrderRepository.findByOrderStatus(CompanyOrderStatus.OPEN)
                 .orElseThrow(() -> new LogicException("There is no open company order"));
+    }
+
+    public Map<Long, BigDecimal> getCafesTotal(CompanyOrder companyOrder) {
+
+        HashMap<Long, BigDecimal> cafesTotal = new HashMap<>();
+
+        for (Order order : companyOrder.getOrders()) {
+
+            for (OrderItem orderItem : order.getItems()){
+
+                Long id = orderItem.getDish().getCafe().getId();
+
+                cafesTotal.putIfAbsent(id, BigDecimal.ZERO);
+
+                cafesTotal.put(id, cafesTotal.get(id).add(orderItem.getTotal()));
+            }
+        }
+
+        return cafesTotal;
     }
 }
