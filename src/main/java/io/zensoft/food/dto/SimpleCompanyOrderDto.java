@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
 @Builder
@@ -21,5 +22,5 @@ public class SimpleCompanyOrderDto {
 
     private Long managerId;
 
-    private BigDecimal total;
+    private Map<Long, BigDecimal> cafesTotal;
 }

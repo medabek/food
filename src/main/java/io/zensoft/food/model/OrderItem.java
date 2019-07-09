@@ -18,7 +18,8 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long dishId;
+    @ManyToOne
+    private Dish dish;
 
     private String dishName;
 

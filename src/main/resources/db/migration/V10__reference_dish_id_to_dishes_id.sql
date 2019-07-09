@@ -1,0 +1,1 @@
+ALTER TABLE items ADD CONSTRAINT dish_id FOREIGN KEY (dish_id) REFERENCES dishes (id);

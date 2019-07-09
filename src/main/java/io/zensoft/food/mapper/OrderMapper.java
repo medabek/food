@@ -26,6 +26,7 @@ public class OrderMapper {
                         map(itemMapper::toItemDto).
                         collect(Collectors.toList()))
                 .total(order.getTotal())
+                .userId(order.getUserId())
                 .build();
     }
 }
