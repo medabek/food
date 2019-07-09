@@ -49,6 +49,6 @@ public class MainController {
     @PreAuthorize("isAuthenticated()")
     @ApiOperation(value = "Current user body to see")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        return new UserSummary(currentUser.getId(), currentUser.getFirstname(), currentUser.getLastname());
+        return new UserSummary(currentUser.getId(), currentUser.getFirstname(), currentUser.getLastname(), currentUser.getBalance());
     }
 }

@@ -25,16 +25,19 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemRepository orderItemRepository;
     private CompanyOrderService companyOrderService;
     private DishService dishService;
+    private UserService userService;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
                             CompanyOrderService companyOrderService,
-                            DishService dishService) {
+                            DishService dishService,
+                            UserService userService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.companyOrderService = companyOrderService;
         this.dishService = dishService;
+        this.userService = userService;
     }
 
 
@@ -84,6 +87,18 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = getUserCurrentOrder(currentUser)
                 .orElseThrow(() -> new LogicException("Open order not found"));
+
+        User user = userService.currentUser(currentUser);
+
+        if (user == null){
+            throw new EntityNotFoundException("User not found");
+        }
+
+        if (user.getBalance().compareTo(order.getTotal()) == -1){
+            throw new LogicException("You do not have enough money");
+        }
+
+        user.offBalance(order.getTotal());
 
         order.setStatus(OrderStatus.CLOSE);
         order.setDate(LocalDateTime.now());

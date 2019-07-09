@@ -10,6 +10,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,6 +60,16 @@ public class User{
     @JsonIgnore
     private List<CompanyOrder> companyOrder;
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @JsonIgnore
+    private List<Payment> userPayments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "manager", orphanRemoval = true)
+    @JsonIgnore
+    private List<Payment> managerPayments = new ArrayList<>();
+
+    private BigDecimal balance = new BigDecimal(0);
+
     public User(@NotBlank @Size(max = 25) String firstname,String lastname, @NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(max = 100) String password) {
         this.firstname = firstname;
         this.email = email;
@@ -71,5 +83,13 @@ public class User{
         this.email = email;
         this.password = password;
         this.roles = roles;
+    }
+
+    public void addBalance(BigDecimal amount){
+        setBalance(this.balance.add(amount));
+    }
+
+    public void offBalance(BigDecimal amount){
+        setBalance(this.balance.subtract(amount));
     }
 }

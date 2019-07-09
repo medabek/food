@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +21,7 @@ public class UserPrincipal implements UserDetails {
     private Long id;
     private String firstname;
     private String lastname;
+    private BigDecimal balance;
 
     @JsonIgnore
     private String email;
@@ -29,12 +31,13 @@ public class UserPrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(Long id, String firstname, String lastname, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String firstname, String lastname, String email, String password, BigDecimal balance, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.balance = balance;
         this.authorities = authorities;
     }
 
@@ -49,6 +52,7 @@ public class UserPrincipal implements UserDetails {
                 user.getLastname(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getBalance(),
                 authorities
         );
     }
