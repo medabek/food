@@ -1,6 +1,7 @@
 package io.zensoft.food.controller;
 
 import io.zensoft.food.dto.OrderDto;
+import io.zensoft.food.dto.OrderPageDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.endpoint.OrderEndpoint;
 import io.zensoft.food.security.CurrentUser;
@@ -11,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -32,9 +32,9 @@ public class OrderController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/get-history")
-    public ResponseEntity<List<OrderDto>> getAllByUser(@CurrentUser UserPrincipal currentUser,
-                                                       @RequestParam(value = "page", defaultValue = "0") int page,
-                                                       @RequestParam(value = "limit", defaultValue = "2") int limit){
+    public ResponseEntity<OrderPageDto> getAllByUser(@CurrentUser UserPrincipal currentUser,
+                                                     @RequestParam(value = "page", defaultValue = "0") int page,
+                                                     @RequestParam(value = "limit", defaultValue = "15") int limit){
         return ResponseEntity.ok(orderEndpoint.getOrdersByCurrentUser(currentUser, page, limit));
     }
 

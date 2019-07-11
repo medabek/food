@@ -1,13 +1,19 @@
 package io.zensoft.food.service.impl;
 
 import io.zensoft.food.domain.AddItemRequest;
+import io.zensoft.food.dto.OrderPageDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.enums.OrderStatus;
 import io.zensoft.food.exception.LogicException;
+import io.zensoft.food.mapper.OrderMapper;
 import io.zensoft.food.model.*;
-import io.zensoft.food.repository.*;
+import io.zensoft.food.repository.OrderItemRepository;
+import io.zensoft.food.repository.OrderRepository;
 import io.zensoft.food.security.UserPrincipal;
-import io.zensoft.food.service.*;
+import io.zensoft.food.service.CompanyOrderService;
+import io.zensoft.food.service.DishService;
+import io.zensoft.food.service.OrderService;
+import io.zensoft.food.service.UserService;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -28,18 +34,21 @@ public class OrderServiceImpl implements OrderService {
     private CompanyOrderService companyOrderService;
     private DishService dishService;
     private UserService userService;
+    private OrderMapper orderMapper;
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
                             CompanyOrderService companyOrderService,
                             DishService dishService,
-                            UserService userService) {
+                            UserService userService,
+                            OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.companyOrderService = companyOrderService;
         this.dishService = dishService;
         this.userService = userService;
+        this.orderMapper = orderMapper;
     }
 
 
@@ -120,13 +129,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Order> getAllByUser(@NonNull UserPrincipal currentUser, Pageable pageableRequest) {
+    public OrderPageDto getAllByUser(@NonNull UserPrincipal currentUser, Pageable pageableRequest) {
 
         Long userId = currentUser.getId();
         Page<Order> allOrders = orderRepository.findAllByUserId(pageableRequest, userId);
-        List<Order> orderEntities = allOrders.getContent();
 
-        return orderEntities;
+        return new OrderPageDto(allOrders.getTotalElements(),
+                allOrders.getTotalPages(),
+                allOrders.getContent().stream()
+                        .map(orderMapper::toOrderDto)
+                        .collect(Collectors.toList()));
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package io.zensoft.food.endpoint.impl;
 
 import io.zensoft.food.dto.CompanyOrderWithUserOrdersDto;
+import io.zensoft.food.dto.CompanyOrderPageDto;
 import io.zensoft.food.dto.SimpleCompanyOrderDto;
 import io.zensoft.food.endpoint.CompanyOrderEndpoint;
 import io.zensoft.food.mapper.CompanyOrderMapper;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,14 +63,16 @@ public class CompanyOrderEndpointImpl implements CompanyOrderEndpoint {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CompanyOrderWithUserOrdersDto> getAllOrders(int page, int limit) {
+    public CompanyOrderPageDto getAllOrders(int page, int limit) {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
         Page<CompanyOrder> allCompanyOrders = companyOrderRepository.findAll(pageableRequest);
-        List<CompanyOrder> companyOrderEntities = allCompanyOrders.getContent();
 
-        return companyOrderEntities.stream()
-                .map(companyOrderMapper::toCompanyOrderGetOrdersDto)
-                .collect(Collectors.toList());
+        return new CompanyOrderPageDto(allCompanyOrders.getTotalElements(),
+                allCompanyOrders.getTotalPages(),
+                allCompanyOrders.getContent().stream()
+                        .map(companyOrderMapper::toCompanyOrderGetOrdersDto)
+                        .collect(Collectors.toList()));
     }
+
 }

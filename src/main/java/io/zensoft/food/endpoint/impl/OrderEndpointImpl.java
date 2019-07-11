@@ -2,6 +2,7 @@ package io.zensoft.food.endpoint.impl;
 
 import io.zensoft.food.domain.AddItemRequest;
 import io.zensoft.food.dto.OrderDto;
+import io.zensoft.food.dto.OrderPageDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.endpoint.OrderEndpoint;
 import io.zensoft.food.mapper.OrderMapper;
@@ -16,8 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderEndpointImpl implements OrderEndpoint {
@@ -60,14 +59,12 @@ public class OrderEndpointImpl implements OrderEndpoint {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OrderDto> getOrdersByCurrentUser(@NonNull UserPrincipal currentUser, int page, int limit) {
+    public OrderPageDto getOrdersByCurrentUser(@NonNull UserPrincipal currentUser, int page, int limit) {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
-        List<Order> orders = orderService.getAllByUser(currentUser, pageableRequest);
 
-        return orders.stream()
-                .map(orderMapper::toOrderDto)
-                .collect(Collectors.toList());
+        return orderService.getAllByUser(currentUser, pageableRequest);
+
     }
 
     @Transactional
