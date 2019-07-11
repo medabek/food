@@ -43,7 +43,9 @@ public class CompanyOrderController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
-    public ResponseEntity<List<CompanyOrderWithUserOrdersDto>> getAllOrders(){
-        return ResponseEntity.ok(companyOrderEndpoint.getAllOrders());
+    public ResponseEntity<List<CompanyOrderWithUserOrdersDto>> getAllOrders(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "limit", defaultValue = "2") int limit){
+        return ResponseEntity.ok(companyOrderEndpoint.getAllOrders(page, limit));
     }
 }

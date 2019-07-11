@@ -6,9 +6,12 @@ import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.endpoint.OrderEndpoint;
 import io.zensoft.food.mapper.OrderMapper;
 import io.zensoft.food.model.Order;
+import io.zensoft.food.repository.OrderRepository;
 import io.zensoft.food.security.UserPrincipal;
 import io.zensoft.food.service.OrderService;
 import lombok.NonNull;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +24,14 @@ public class OrderEndpointImpl implements OrderEndpoint {
 
     private OrderService orderService;
     private OrderMapper orderMapper;
+    private OrderRepository orderRepository;
 
     public OrderEndpointImpl(OrderService orderService,
-                             OrderMapper orderMapper) {
+                             OrderMapper orderMapper,
+                             OrderRepository orderRepository) {
         this.orderService = orderService;
         this.orderMapper = orderMapper;
+        this.orderRepository = orderRepository;
     }
 
     @Transactional
@@ -54,9 +60,10 @@ public class OrderEndpointImpl implements OrderEndpoint {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OrderDto> getOrdersByCurrentUser(@NonNull UserPrincipal currentUser) {
+    public List<OrderDto> getOrdersByCurrentUser(@NonNull UserPrincipal currentUser, int page, int limit) {
 
-        List<Order> orders = orderService.getAllByUser(currentUser);
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        List<Order> orders = orderService.getAllByUser(currentUser, pageableRequest);
 
         return orders.stream()
                 .map(orderMapper::toOrderDto)

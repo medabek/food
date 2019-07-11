@@ -32,8 +32,10 @@ public class OrderController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/get-history")
-    public ResponseEntity<List<OrderDto>> getAllByUser(@CurrentUser UserPrincipal currentUser){
-        return ResponseEntity.ok(orderEndpoint.getOrdersByCurrentUser(currentUser));
+    public ResponseEntity<List<OrderDto>> getAllByUser(@CurrentUser UserPrincipal currentUser,
+                                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                                       @RequestParam(value = "limit", defaultValue = "2") int limit){
+        return ResponseEntity.ok(orderEndpoint.getOrdersByCurrentUser(currentUser, page, limit));
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")

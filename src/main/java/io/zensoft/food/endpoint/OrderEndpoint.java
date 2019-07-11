@@ -12,7 +12,7 @@ public interface OrderEndpoint {
 
     OrderDto getCurrentOrder(UserPrincipal currentUser);
 
-    List<OrderDto> getOrdersByCurrentUser(UserPrincipal currentUser);
+    List<OrderDto> getOrdersByCurrentUser(UserPrincipal currentUser, int page, int limit);
 
     OrderDto confirm(UserPrincipal currentUser);
 

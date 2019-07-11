@@ -14,5 +14,5 @@ public interface CompanyOrderEndpoint {
 
     CompanyOrderWithUserOrdersDto currentCompanyOrder();
 
-    List<CompanyOrderWithUserOrdersDto> getAllOrders();
+    List<CompanyOrderWithUserOrdersDto> getAllOrders(int page, int limit);
 }

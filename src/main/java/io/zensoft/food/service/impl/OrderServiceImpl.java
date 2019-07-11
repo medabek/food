@@ -10,6 +10,8 @@ import io.zensoft.food.security.UserPrincipal;
 import io.zensoft.food.service.*;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,11 +92,11 @@ public class OrderServiceImpl implements OrderService {
 
         User user = userService.currentUser(currentUser);
 
-        if (user == null){
+        if (user == null) {
             throw new EntityNotFoundException("User not found");
         }
 
-        if (user.getBalance().compareTo(order.getTotal()) == -1){
+        if (user.getBalance().compareTo(order.getTotal()) == -1) {
             throw new LogicException("You do not have enough money");
         }
 
@@ -118,10 +120,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Order> getAllByUser(@NonNull UserPrincipal currentUser) {
-        Long userId = currentUser.getId();
+    public List<Order> getAllByUser(@NonNull UserPrincipal currentUser, Pageable pageableRequest) {
 
-        return orderRepository.findAllByUserId(userId);
+        Long userId = currentUser.getId();
+        Page<Order> allOrders = orderRepository.findAllByUserId(pageableRequest, userId);
+        List<Order> orderEntities = allOrders.getContent();
+
+        return orderEntities;
     }
 
     @Transactional
