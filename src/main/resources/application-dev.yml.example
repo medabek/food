@@ -26,5 +26,5 @@ logging:
 aws:
   endpoint-url: https://s3-eu-west-1.amazonaws.com
   access-key: AKIAUNGXOCQBVNBOPI7R
-  secret-key: 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
+  secret-key: 5dTiKWNc0dwyv
   bucket-name: zenfood.dish
