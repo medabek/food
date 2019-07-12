@@ -1,7 +1,7 @@
 package io.zensoft.food.controller;
 
+import io.zensoft.food.dto.GeneralPageDto;
 import io.zensoft.food.dto.OrderDto;
-import io.zensoft.food.dto.OrderPageDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.endpoint.OrderEndpoint;
 import io.zensoft.food.security.CurrentUser;
@@ -32,9 +32,9 @@ public class OrderController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/get-history")
-    public ResponseEntity<OrderPageDto> getAllByUser(@CurrentUser UserPrincipal currentUser,
-                                                     @RequestParam(value = "page", defaultValue = "0") int page,
-                                                     @RequestParam(value = "limit", defaultValue = "15") int limit){
+    public ResponseEntity<GeneralPageDto> getAllByUser(@CurrentUser UserPrincipal currentUser,
+                                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                                       @RequestParam(value = "limit", defaultValue = "15") int limit){
         return ResponseEntity.ok(orderEndpoint.getOrdersByCurrentUser(currentUser, page, limit));
     }
 

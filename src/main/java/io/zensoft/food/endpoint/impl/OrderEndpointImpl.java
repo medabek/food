@@ -1,8 +1,8 @@
 package io.zensoft.food.endpoint.impl;
 
 import io.zensoft.food.domain.AddItemRequest;
+import io.zensoft.food.dto.GeneralPageDto;
 import io.zensoft.food.dto.OrderDto;
-import io.zensoft.food.dto.OrderPageDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.endpoint.OrderEndpoint;
 import io.zensoft.food.mapper.OrderMapper;
@@ -59,7 +59,7 @@ public class OrderEndpointImpl implements OrderEndpoint {
 
     @Transactional(readOnly = true)
     @Override
-    public OrderPageDto getOrdersByCurrentUser(@NonNull UserPrincipal currentUser, int page, int limit) {
+    public GeneralPageDto getOrdersByCurrentUser(@NonNull UserPrincipal currentUser, int page, int limit) {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
 

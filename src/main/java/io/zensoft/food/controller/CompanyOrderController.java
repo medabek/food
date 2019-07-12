@@ -1,7 +1,7 @@
 package io.zensoft.food.controller;
 
 import io.zensoft.food.dto.CompanyOrderWithUserOrdersDto;
-import io.zensoft.food.dto.CompanyOrderPageDto;
+import io.zensoft.food.dto.GeneralPageDto;
 import io.zensoft.food.dto.SimpleCompanyOrderDto;
 import io.zensoft.food.endpoint.CompanyOrderEndpoint;
 import io.zensoft.food.security.CurrentUser;
@@ -42,7 +42,7 @@ public class CompanyOrderController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping
-    public ResponseEntity<CompanyOrderPageDto> getAllOrders(
+    public ResponseEntity<GeneralPageDto> getAllOrders(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "limit", defaultValue = "15") int limit){
         return ResponseEntity.ok(companyOrderEndpoint.getAllOrders(page, limit));

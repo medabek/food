@@ -1,7 +1,7 @@
 package io.zensoft.food.endpoint.impl;
 
 import io.zensoft.food.dto.CompanyOrderWithUserOrdersDto;
-import io.zensoft.food.dto.CompanyOrderPageDto;
+import io.zensoft.food.dto.GeneralPageDto;
 import io.zensoft.food.dto.SimpleCompanyOrderDto;
 import io.zensoft.food.endpoint.CompanyOrderEndpoint;
 import io.zensoft.food.mapper.CompanyOrderMapper;
@@ -63,12 +63,12 @@ public class CompanyOrderEndpointImpl implements CompanyOrderEndpoint {
 
     @Transactional(readOnly = true)
     @Override
-    public CompanyOrderPageDto getAllOrders(int page, int limit) {
+    public GeneralPageDto getAllOrders(int page, int limit) {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
         Page<CompanyOrder> allCompanyOrders = companyOrderRepository.findAll(pageableRequest);
 
-        return new CompanyOrderPageDto(allCompanyOrders.getTotalElements(),
+        return new GeneralPageDto(allCompanyOrders.getTotalElements(),
                 allCompanyOrders.getTotalPages(),
                 allCompanyOrders.getContent().stream()
                         .map(companyOrderMapper::toCompanyOrderGetOrdersDto)

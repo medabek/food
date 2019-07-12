@@ -1,7 +1,7 @@
 package io.zensoft.food.service.impl;
 
 import io.zensoft.food.domain.AddItemRequest;
-import io.zensoft.food.dto.OrderPageDto;
+import io.zensoft.food.dto.GeneralPageDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.enums.OrderStatus;
 import io.zensoft.food.exception.LogicException;
@@ -129,12 +129,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(readOnly = true)
     @Override
-    public OrderPageDto getAllByUser(@NonNull UserPrincipal currentUser, Pageable pageableRequest) {
+    public GeneralPageDto getAllByUser(@NonNull UserPrincipal currentUser, Pageable pageableRequest) {
 
         Long userId = currentUser.getId();
         Page<Order> allOrders = orderRepository.findAllByUserId(pageableRequest, userId);
 
-        return new OrderPageDto(allOrders.getTotalElements(),
+
+        return new GeneralPageDto(allOrders.getTotalElements(),
                 allOrders.getTotalPages(),
                 allOrders.getContent().stream()
                         .map(orderMapper::toOrderDto)

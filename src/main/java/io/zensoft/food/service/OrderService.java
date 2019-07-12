@@ -1,7 +1,7 @@
 package io.zensoft.food.service;
 
 import io.zensoft.food.domain.AddItemRequest;
-import io.zensoft.food.dto.OrderPageDto;
+import io.zensoft.food.dto.GeneralPageDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.model.Order;
 import io.zensoft.food.security.CurrentUser;
@@ -19,7 +19,7 @@ public interface OrderService {
 
     Optional<Order> getUserCurrentOrder(@CurrentUser UserPrincipal currentUser);
 
-    OrderPageDto getAllByUser(@CurrentUser UserPrincipal currentUser, Pageable pageableRequest);
+    GeneralPageDto getAllByUser(@CurrentUser UserPrincipal currentUser, Pageable pageableRequest);
 
     void deleteItem(@NonNull AddItemRequestDto request, @NonNull @CurrentUser UserPrincipal currentUser);
 }
