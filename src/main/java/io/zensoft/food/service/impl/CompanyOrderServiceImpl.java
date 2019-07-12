@@ -11,7 +11,6 @@ import io.zensoft.food.service.CompanyOrderService;
 import io.zensoft.food.service.UserService;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,26 +20,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingDouble;
 
 @Service
 public class CompanyOrderServiceImpl implements CompanyOrderService {
 
     private CompanyOrderRepository companyOrderRepository;
     private UserService userService;
-    private DishServiceImpl dishService;
 
     @Autowired
     public CompanyOrderServiceImpl(CompanyOrderRepository companyOrderRepository,
-                                   UserService userService,
-                                   DishServiceImpl dishService) {
+                                   UserService userService) {
         this.companyOrderRepository = companyOrderRepository;
         this.userService = userService;
-        this.dishService = dishService;
     }
 
 

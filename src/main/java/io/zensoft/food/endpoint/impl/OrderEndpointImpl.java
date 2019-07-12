@@ -1,31 +1,36 @@
 package io.zensoft.food.endpoint.impl;
 
 import io.zensoft.food.domain.AddItemRequest;
+import io.zensoft.food.dto.GeneralPageDto;
 import io.zensoft.food.dto.OrderDto;
 import io.zensoft.food.dto.request.AddItemRequestDto;
 import io.zensoft.food.endpoint.OrderEndpoint;
 import io.zensoft.food.mapper.OrderMapper;
 import io.zensoft.food.model.Order;
+import io.zensoft.food.repository.OrderRepository;
 import io.zensoft.food.security.UserPrincipal;
 import io.zensoft.food.service.OrderService;
 import lombok.NonNull;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderEndpointImpl implements OrderEndpoint {
 
     private OrderService orderService;
     private OrderMapper orderMapper;
+    private OrderRepository orderRepository;
 
     public OrderEndpointImpl(OrderService orderService,
-                             OrderMapper orderMapper) {
+                             OrderMapper orderMapper,
+                             OrderRepository orderRepository) {
         this.orderService = orderService;
         this.orderMapper = orderMapper;
+        this.orderRepository = orderRepository;
     }
 
     @Transactional
@@ -54,13 +59,12 @@ public class OrderEndpointImpl implements OrderEndpoint {
 
     @Transactional(readOnly = true)
     @Override
-    public List<OrderDto> getOrdersByCurrentUser(@NonNull UserPrincipal currentUser) {
+    public GeneralPageDto getOrdersByCurrentUser(@NonNull UserPrincipal currentUser, int page, int limit) {
 
-        List<Order> orders = orderService.getAllByUser(currentUser);
+        Pageable pageableRequest = PageRequest.of(page, limit);
 
-        return orders.stream()
-                .map(orderMapper::toOrderDto)
-                .collect(Collectors.toList());
+        return orderService.getAllByUser(currentUser, pageableRequest);
+
     }
 
     @Transactional
