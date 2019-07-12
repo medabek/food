@@ -26,4 +26,8 @@ public class Dish {
     private Cafe cafe;
 
     private String imageName;
+
+    @ManyToOne
+    @JoinColumn(name = "todays_menu_id")
+    private TodaysMenu todaysMenu;
 }
