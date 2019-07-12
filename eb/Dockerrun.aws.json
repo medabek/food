@@ -1,0 +1,31 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "name": "zenfood-back",
+        "image": "303247004675.dkr.ecr.eu-west-1.amazonaws.com/zenfood:backend",
+        "essential": true,
+        "memory": 733,
+        "portMappings": [
+          {
+            "hostPort": 8000,
+            "containerPort":8000            
+          }
+        ],
+        "links": [
+            "zenfood_front"
+        ]
+      },
+      {
+        "name": "zenfood_front",
+        "image": "303247004675.dkr.ecr.eu-west-1.amazonaws.com/zenfood:front-end",
+        "memory": 500,
+        "portMappings": [
+            {
+                "hostPort": 80,
+                "containerPort": 3000
+            }
+        ]
+      }
+    ]
+}

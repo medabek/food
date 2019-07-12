@@ -1,0 +1,40 @@
+image: docker:latest
+variables:
+ DOCKER_DRIVER: overlay2 
+ DOCKER_HOST: tcp://docker:2375/
+services:
+  - docker:dind
+stages:
+  - build-push
+  - deploy
+    
+build:
+  image: twalter/maven-docker
+  stage: build-push  
+  script:
+    - apt update
+    - apt install -y python python-pip python-dev
+    - pip install awscli 
+    - $(aws ecr get-login --no-include-email --region eu-west-1) 
+    - mvn package
+    - docker build -t "303247004675.dkr.ecr.eu-west-1.amazonaws.com/zenfood:backend" .
+    - docker push 303247004675.dkr.ecr.eu-west-1.amazonaws.com/zenfood:backend
+  only:
+      - master       
+      
+deploy:
+  stage: deploy
+  script: 
+    - apk add --update python py-pip python-dev
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region eu-west-1)
+
+    - aws s3 cp eb/app.zip s3://$AWS_S3_BUCKET/
+
+    - aws elasticbeanstalk create-application-version --application-name zenfood --version-label $CI_CONCURRENT_ID --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key='app.zip' --region eu-west-1
+
+    - aws elasticbeanstalk update-environment --environment-name Zenfood-env --version-label $CI_CONCURRENT_ID --region eu-west-1
+  
+  only:
+      - master 
+  
