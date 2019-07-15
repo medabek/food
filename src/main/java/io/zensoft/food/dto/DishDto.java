@@ -17,4 +17,6 @@ public class DishDto {
     private BigDecimal price;
 
     private String imageUrl;
+
+    private Long cafeId;
 }
