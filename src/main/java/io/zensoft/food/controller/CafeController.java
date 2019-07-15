@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,14 +32,17 @@ public class CafeController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<CafeDto> add(@Valid @RequestBody CafeCreateRequestDto request) {
-        return ResponseEntity.ok(cafeEndpoint.save(request));
+    public ResponseEntity<CafeDto> add(@Valid @RequestPart(value = "cafe") CafeCreateRequestDto request,
+                                       @RequestPart(value = "file") MultipartFile file) {
+        return ResponseEntity.ok(cafeEndpoint.save(request, file));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<CafeDto> update(@PathVariable Long id, @Valid @RequestBody CafeUpdateRequestDto request) {
-        return ResponseEntity.ok(cafeEndpoint.update(id, request));
+    public ResponseEntity<CafeDto> update(@PathVariable Long id,
+                                          @Valid @RequestPart(value = "cafe") CafeUpdateRequestDto request,
+                                          @RequestPart(value = "file") MultipartFile file) {
+        return ResponseEntity.ok(cafeEndpoint.update(id, request, file));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

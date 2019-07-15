@@ -7,4 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CafeCreateRequest {
     private String name;
+
+    private String logoName;
 }

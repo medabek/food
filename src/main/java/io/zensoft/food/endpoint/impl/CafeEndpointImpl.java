@@ -9,10 +9,12 @@ import io.zensoft.food.endpoint.CafeEndpoint;
 import io.zensoft.food.mapper.CafeMapper;
 import io.zensoft.food.model.Cafe;
 import io.zensoft.food.service.CafeService;
+import io.zensoft.food.service.impl.AmazonClientServiceImpl;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,17 +24,27 @@ public class CafeEndpointImpl implements CafeEndpoint {
 
     private final CafeService cafeService;
     private final CafeMapper cafeMapper;
+    private AmazonClientServiceImpl amazonClient;
 
     @Autowired
-    public CafeEndpointImpl(CafeService cafeService, CafeMapper cafeMapper) {
+    public CafeEndpointImpl(CafeService cafeService,
+                            CafeMapper cafeMapper,
+                            AmazonClientServiceImpl amazonClient) {
         this.cafeService = cafeService;
         this.cafeMapper = cafeMapper;
+        this.amazonClient = amazonClient;
     }
 
     @Transactional
     @Override
-    public CafeDto save(@NonNull CafeCreateRequestDto request) {
-        CafeCreateRequest cafeCreateRequest = new CafeCreateRequest(request.getName());
+    public CafeDto save(@NonNull CafeCreateRequestDto request,
+                        MultipartFile multipartFile) {
+
+        String fileName = amazonClient.uploadFile(multipartFile);
+
+        CafeCreateRequest cafeCreateRequest = new CafeCreateRequest(
+                request.getName(),
+                fileName);
 
         Cafe cafe = cafeService.add(cafeCreateRequest);
 
@@ -41,11 +53,15 @@ public class CafeEndpointImpl implements CafeEndpoint {
 
     @Transactional
     @Override
-    public CafeDto update(@NonNull Long id, @NonNull CafeUpdateRequestDto request) {
+    public CafeDto update(@NonNull Long id, @NonNull CafeUpdateRequestDto request,
+                          MultipartFile multipartFile) {
+
+        String fileName = amazonClient.uploadFile(multipartFile);
 
         CafeUpdateRequest cafeUpdateRequest = new CafeUpdateRequest(
                 id,
-                request.getName()
+                request.getName(),
+                fileName
         );
 
         Cafe updatedCafe = cafeService.update(cafeUpdateRequest);
@@ -56,6 +72,12 @@ public class CafeEndpointImpl implements CafeEndpoint {
     @Transactional
     @Override
     public void delete(@NonNull Long id) {
+
+        Cafe cafe = cafeService.getById(id);
+
+        String logoName = cafe.getLogoName();
+        amazonClient.deleteFileFromS3Bucket(logoName);
+
         cafeService.delete(id);
     }
 
