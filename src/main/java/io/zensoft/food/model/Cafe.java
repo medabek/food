@@ -26,4 +26,6 @@ public class Cafe {
     @OneToMany(mappedBy = "cafe", orphanRemoval = true)
     @JsonIgnore
     private List<Dish> dishes = new ArrayList<>();
+
+    private String logoName;
 }

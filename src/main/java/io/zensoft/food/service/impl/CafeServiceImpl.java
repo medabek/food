@@ -29,6 +29,7 @@ public class CafeServiceImpl implements CafeService {
 
         Cafe cafe = new Cafe();
         cafe.setName(request.getName());
+        cafe.setLogoName(request.getLogoName());
 
         return cafeRepository.save(cafe);
     }
@@ -45,6 +46,7 @@ public class CafeServiceImpl implements CafeService {
 
         cafe.setId(request.getId());
         cafe.setName(request.getName());
+        cafe.setLogoName(request.getLogoName());
 
         return cafeRepository.save(cafe);
     }
@@ -65,6 +67,10 @@ public class CafeServiceImpl implements CafeService {
     @Transactional
     @Override
     public void delete(@NonNull Long id) {
+
+        Cafe cafe = cafeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cafe with id = " + id + " not found"));
+
         cafeRepository.deleteById(id);
     }
 }

@@ -8,4 +8,6 @@ import lombok.Data;
 public class CafeDto {
     private Long id;
     private String name;
+
+    private String logoUrl;
 }

@@ -3,6 +3,7 @@ package io.zensoft.food.service;
 import io.zensoft.food.domain.CafeCreateRequest;
 import io.zensoft.food.domain.CafeUpdateRequest;
 import io.zensoft.food.model.Cafe;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
