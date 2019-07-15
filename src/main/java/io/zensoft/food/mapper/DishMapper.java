@@ -24,6 +24,7 @@ public class DishMapper {
                 .portion(dish.getPortion())
                 .price(dish.getPrice())
                 .imageUrl(getImageUrl(dish))
+                .cafeId(dish.getCafe().getId())
                 .build();
     }
 

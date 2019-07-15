@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 public class OrderItemMapper {
     public OrderItemDto toItemDto(@NonNull OrderItem item){
         return OrderItemDto.builder()
-                .dishName(item.getDishName())
+                .id(item.getDish().getId())
+                .name(item.getDishName())
                 .price(item.getPrice())
                 .quantity(item.getQuantity())
                 .total(item.getTotal())
+                .cafeId(item.getDish().getCafe().getId())
                 .build();
     }
 }

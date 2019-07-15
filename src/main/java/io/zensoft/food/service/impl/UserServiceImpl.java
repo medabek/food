@@ -1,5 +1,6 @@
 package io.zensoft.food.service.impl;
 
+import io.zensoft.food.domain.SearchUserRequest;
 import io.zensoft.food.exception.LogicException;
 import io.zensoft.food.exception.ResourceNotFoundException;
 import io.zensoft.food.model.Role;
@@ -18,8 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -91,12 +94,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
-    }
-
-    @Override
     public User currentUser(UserPrincipal currentUser) {
         return userRepository.findUserByEmail(currentUser.getEmail());
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<User> findByName(String search) {
+
+        if (search == null) {
+            return userRepository.findAll();
+        }
+
+        return userRepository.findByFirstnameStartingWithIgnoreCaseOrLastnameStartingWithIgnoreCase(search, search);
+    }
+
 }
