@@ -30,6 +30,8 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    private double portion;
+
     public BigDecimal getTotal() {
         return price.multiply(BigDecimal.valueOf(quantity));
     }

@@ -15,6 +15,8 @@ public class OrderItemMapper {
                 .quantity(item.getQuantity())
                 .total(item.getTotal())
                 .cafeId(item.getDish().getCafe().getId())
+                .cafeName(item.getDish().getCafe().getName())
+                .portion(item.getPortion())
                 .build();
     }
 }
