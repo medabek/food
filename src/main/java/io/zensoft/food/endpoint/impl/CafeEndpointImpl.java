@@ -44,6 +44,7 @@ public class CafeEndpointImpl implements CafeEndpoint {
 
         CafeCreateRequest cafeCreateRequest = new CafeCreateRequest(
                 request.getName(),
+                request.getDelivery(),
                 fileName);
 
         Cafe cafe = cafeService.add(cafeCreateRequest);
@@ -61,6 +62,7 @@ public class CafeEndpointImpl implements CafeEndpoint {
         CafeUpdateRequest cafeUpdateRequest = new CafeUpdateRequest(
                 id,
                 request.getName(),
+                request.getDelivery(),
                 fileName
         );
 

@@ -2,10 +2,7 @@ package io.zensoft.food.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.zensoft.food.enums.OrderStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -19,7 +16,8 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +38,13 @@ public class Order {
     @JoinColumn(name = "company_order_id")
     private CompanyOrder companyOrder;
 
-    private BigDecimal total;
+    private BigDecimal total = BigDecimal.ZERO;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "orders_cafes",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "cafe_id"))
+    private List<Cafe> cafes = new ArrayList<>();
 
     public void addItem(@NonNull OrderItem orderItem) {
         if (CollectionUtils.isEmpty(this.items)) {
@@ -51,14 +55,16 @@ public class Order {
         orderItem.setOrder(this);
     }
 
-    public BigDecimal getTotal() {
+    public void addCafe(@NonNull Cafe cafe) {
+        this.cafes.add(cafe);
+    }
 
-        BigDecimal totalSum = new BigDecimal(0);
+    public BigDecimal getOrderTotal() {
 
-        for (OrderItem item : items) {
+        BigDecimal totalSum = this.getTotal();
+        for (OrderItem item : this.items) {
             totalSum = totalSum.add(item.getTotal());
         }
-
         return totalSum;
     }
 }

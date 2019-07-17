@@ -1,7 +1,7 @@
 package io.zensoft.food.mapper;
 
-import io.zensoft.food.dto.SimpleCompanyOrderDto;
 import io.zensoft.food.dto.CompanyOrderWithUserOrdersDto;
+import io.zensoft.food.dto.SimpleCompanyOrderDto;
 import io.zensoft.food.model.CompanyOrder;
 import io.zensoft.food.service.impl.CompanyOrderServiceImpl;
 import lombok.NonNull;
@@ -50,7 +50,7 @@ public class CompanyOrderMapper {
                 .builder()
                 .id(companyOrder.getId())
                 .status(companyOrder.getOrderStatus())
-                .orders(companyOrder.getOrders()
+                .orders(companyOrder.getCompanyTotal()
                         .stream()
                         .map(orderMapper::toOrderDto)
                         .collect(Collectors.toList()))

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface CompanyOrderRepository extends JpaRepository<CompanyOrder, Long>,
         PagingAndSortingRepository<CompanyOrder, Long> {
     Optional<CompanyOrder> findByOrderStatus(CompanyOrderStatus orderStatus);
+
+    CompanyOrder getById(Long id);
 }

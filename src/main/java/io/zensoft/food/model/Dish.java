@@ -9,7 +9,8 @@ import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-@Data
+@Getter
+@Setter
 public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

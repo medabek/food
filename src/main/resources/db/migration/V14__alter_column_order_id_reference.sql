@@ -1,0 +1,1 @@
+ALTER TABLE items ADD CONSTRAINT order_id FOREIGN KEY (order_id) REFERENCES orders (id);

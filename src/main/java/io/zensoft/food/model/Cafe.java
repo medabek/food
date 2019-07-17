@@ -1,12 +1,10 @@
 package io.zensoft.food.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,8 @@ import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Cafe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +27,6 @@ public class Cafe {
     private List<Dish> dishes = new ArrayList<>();
 
     private String logoName;
+
+    private BigDecimal delivery = new BigDecimal(0);
 }

@@ -29,6 +29,7 @@ public class CafeServiceImpl implements CafeService {
 
         Cafe cafe = new Cafe();
         cafe.setName(request.getName());
+        cafe.setDelivery(request.getDelivery());
         cafe.setLogoName(request.getLogoName());
 
         return cafeRepository.save(cafe);
@@ -46,6 +47,7 @@ public class CafeServiceImpl implements CafeService {
 
         cafe.setId(request.getId());
         cafe.setName(request.getName());
+        cafe.setDelivery(request.getDelivery());
         cafe.setLogoName(request.getLogoName());
 
         return cafeRepository.save(cafe);

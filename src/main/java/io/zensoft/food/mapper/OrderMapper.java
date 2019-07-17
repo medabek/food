@@ -13,6 +13,7 @@ public class OrderMapper {
 
     private final OrderItemMapper itemMapper;
 
+
     @Autowired
     public OrderMapper(OrderItemMapper itemMapper) {
         this.itemMapper = itemMapper;
@@ -25,8 +26,9 @@ public class OrderMapper {
                 .items(order.getItems().stream().
                         map(itemMapper::toItemDto).
                         collect(Collectors.toList()))
-                .total(order.getTotal())
+                .total(order.getOrderTotal())
                 .userId(order.getUserId())
                 .build();
     }
+
 }
