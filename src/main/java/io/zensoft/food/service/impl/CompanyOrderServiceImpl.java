@@ -26,12 +26,15 @@ public class CompanyOrderServiceImpl implements CompanyOrderService {
 
     private CompanyOrderRepository companyOrderRepository;
     private UserService userService;
+    private CafeServiceImpl cafeService;
 
     @Autowired
     public CompanyOrderServiceImpl(CompanyOrderRepository companyOrderRepository,
-                                   UserService userService) {
+                                   UserService userService,
+                                   CafeServiceImpl cafeService) {
         this.companyOrderRepository = companyOrderRepository;
         this.userService = userService;
+        this.cafeService = cafeService;
     }
 
 
@@ -86,7 +89,7 @@ public class CompanyOrderServiceImpl implements CompanyOrderService {
 
         for (Order order : companyOrder.getOrders()) {
 
-            for (OrderItem orderItem : order.getItems()){
+            for (OrderItem orderItem : order.getItems()) {
 
                 Long id = orderItem.getDish().getCafe().getId();
 
@@ -94,6 +97,10 @@ public class CompanyOrderServiceImpl implements CompanyOrderService {
 
                 cafesTotal.put(id, cafesTotal.get(id).add(orderItem.getTotal()));
             }
+
+        }
+        for (Long id : cafesTotal.keySet()) {
+            cafesTotal.put(id, cafesTotal.get(id).add(cafeService.getById(id).getDelivery()));
         }
 
         return cafesTotal;

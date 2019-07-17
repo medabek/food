@@ -11,12 +11,14 @@ import io.zensoft.food.repository.OrderRepository;
 import io.zensoft.food.security.UserPrincipal;
 import io.zensoft.food.service.OrderService;
 import lombok.NonNull;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderEndpointImpl implements OrderEndpoint {
@@ -63,8 +65,13 @@ public class OrderEndpointImpl implements OrderEndpoint {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
 
-        return orderService.getAllByUser(currentUser, pageableRequest);
-
+        Page<Order> allOrders = orderRepository.findAllByUserId(pageableRequest, currentUser.getId());
+        
+        return new GeneralPageDto(allOrders.getTotalElements(),
+                allOrders.getTotalPages(),
+                allOrders.getContent().stream()
+                        .map(orderMapper::toOrderDto)
+                        .collect(Collectors.toList()));
     }
 
     @Transactional

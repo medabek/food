@@ -1,8 +1,6 @@
 package io.zensoft.food.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,7 +8,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "items")
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItem {

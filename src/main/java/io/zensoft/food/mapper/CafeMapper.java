@@ -21,6 +21,7 @@ public class CafeMapper {
         return CafeDto.builder()
                 .id(cafe.getId())
                 .name(cafe.getName())
+                .delivery(cafe.getDelivery())
                 .logoUrl(getLogoUrl(cafe))
                 .build();
     }
