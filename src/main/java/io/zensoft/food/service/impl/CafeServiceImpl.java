@@ -2,6 +2,7 @@ package io.zensoft.food.service.impl;
 
 import io.zensoft.food.domain.CafeCreateRequest;
 import io.zensoft.food.domain.CafeUpdateRequest;
+import io.zensoft.food.exception.LogicException;
 import io.zensoft.food.model.Cafe;
 import io.zensoft.food.repository.CafeRepository;
 import io.zensoft.food.service.CafeService;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CafeServiceImpl implements CafeService {
@@ -27,7 +29,15 @@ public class CafeServiceImpl implements CafeService {
     @Override
     public Cafe add(@NonNull CafeCreateRequest request) {
 
+        Optional<Cafe> optionalCafe = cafeRepository.findByName(request.getName());
+
+        if (optionalCafe.isPresent()){
+            throw new LogicException("Cafe with this name exists");
+
+        }
+
         Cafe cafe = new Cafe();
+
         cafe.setName(request.getName());
         cafe.setDelivery(request.getDelivery());
         cafe.setLogoName(request.getLogoName());

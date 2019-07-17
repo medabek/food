@@ -18,5 +18,5 @@ public class DishDto {
 
     private String imageUrl;
 
-    private Long cafeId;
+    private String cafeName;
 }

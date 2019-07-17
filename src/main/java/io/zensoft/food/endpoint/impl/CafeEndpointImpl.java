@@ -54,7 +54,8 @@ public class CafeEndpointImpl implements CafeEndpoint {
 
     @Transactional
     @Override
-    public CafeDto update(@NonNull Long id, @NonNull CafeUpdateRequestDto request,
+    public CafeDto update(@NonNull Long id,
+                          @NonNull CafeUpdateRequestDto request,
                           MultipartFile multipartFile) {
 
         String fileName = amazonClient.uploadFile(multipartFile);
