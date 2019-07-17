@@ -71,8 +71,7 @@ public class DishServiceImpl implements DishService {
     public void delete(@NonNull Long id) {
         Dish dish = dishRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Dish with id = " + id + " not found."));
-        String imageName = dish.getImageName();
-        amazonClient.deleteFileFromS3Bucket(imageName);
+        dish.setTodaysMenu(null);
         dishRepository.deleteById(id);
     }
 

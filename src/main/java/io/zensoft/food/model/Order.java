@@ -24,7 +24,7 @@ public class Order {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.OPEN;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -51,8 +51,10 @@ public class Order {
             this.items = new ArrayList<>();
         }
 
-        this.items.add(orderItem);
-        orderItem.setOrder(this);
+        if (!items.contains(orderItem)) {
+            this.items.add(orderItem);
+            orderItem.setOrder(this);
+        }
     }
 
     public void addCafe(@NonNull Cafe cafe) {

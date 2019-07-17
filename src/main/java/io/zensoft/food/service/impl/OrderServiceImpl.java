@@ -54,7 +54,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = getUserCurrentOrder(currentUser).orElseGet(() -> {
             Order newOrder = new Order();
 
-            newOrder.setStatus(OrderStatus.OPEN);
             newOrder.setUserId(currentUser.getId());
 
             return orderRepository.save(newOrder);
@@ -140,6 +139,7 @@ public class OrderServiceImpl implements OrderService {
         if (diff == 0) {
             order.getItems().removeIf(orderItem -> orderItem.getId().equals(item.getId()));
             order.setTotal(order.getTotal());
+            orderItemRepository.delete(item);
             return;
         }
 

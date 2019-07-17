@@ -5,8 +5,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 @Table(name = "cafes")
@@ -20,6 +22,7 @@ public class Cafe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String name;
 
     @OneToMany(mappedBy = "cafe", orphanRemoval = true)
