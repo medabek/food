@@ -19,4 +19,8 @@ public class OrderItemDto {
     private BigDecimal total;
 
     private Long cafeId;
+
+    private String cafeName;
+
+    private double portion;
 }

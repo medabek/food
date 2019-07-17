@@ -69,6 +69,7 @@ public class OrderServiceImpl implements OrderService {
             item.setDishName(dish.getName());
             item.setPrice(dish.getPrice());
             item.setQuantity(request.getQuantity());
+            item.setPortion(dish.getPortion());
 
             order.addItem(item);
             order.addCafe(dish.getCafe());
